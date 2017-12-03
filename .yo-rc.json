@@ -1,0 +1,18 @@
+{
+  "generator-ngx-rocket": {
+    "version": "3.0.0",
+    "props": {
+      "appName": "AngularWordSearch",
+      "target": [
+        "web"
+      ],
+      "pwa": true,
+      "ui": "material",
+      "layout": "side-menu",
+      "auth": false,
+      "projectName": "angular-word-search",
+      "packageManager": "yarn",
+      "mobile": []
+    }
+  }
+}

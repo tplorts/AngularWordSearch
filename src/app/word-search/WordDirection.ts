@@ -1,3 +1,6 @@
+import { unitScalar } from './helpers';
+
+
 
 export class WordDirection {
   public static All = [
@@ -7,7 +10,13 @@ export class WordDirection {
   public static OnlyHorizontal = WordDirection.All.filter(d => d.deltaY === 0);
   public static OnlyVertical = WordDirection.All.filter(d => d.deltaX === 0);
 
-  constructor(private _deltaX: number, private _deltaY: number) { }
+  private _deltaX: number;
+  private _deltaY: number;
+
+  constructor(_deltaX: number, _deltaY: number) {
+    this._deltaX = unitScalar(_deltaX);
+    this._deltaY = unitScalar(_deltaY);
+  }
 
   public get deltaX(): number {
     return this._deltaX;

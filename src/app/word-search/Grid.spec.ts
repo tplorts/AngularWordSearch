@@ -1,6 +1,6 @@
 // import { TestBed, inject } from '@angular/core/testing';
 
-import { LetterGrid } from './LetterGrid';
+import { LetterGrid } from './Grid';
 import { Range2D, Range1D } from './DimensionalRange';
 
 

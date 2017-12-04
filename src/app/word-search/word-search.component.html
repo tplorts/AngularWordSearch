@@ -1,0 +1,39 @@
+
+<div class="wrapper">
+
+  <div class="grid">
+    <table>
+      <tr *ngFor="let row of rows">
+        <td *ngFor="let column of columns">
+          <div
+            class="letter-block"
+            [ngClass]="{ 'selected': isSelected(row, column), 'discovered': isDiscovered(row, column) }"
+            (click)="select(row, column)"
+          >
+            <span [innerHtml]="letter(row, column)"></span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="word-list">
+    <div class="pending-words">
+      <h3>Pending</h3>
+      <ul>
+        <li *ngFor="let word of pendingWords">
+          {{ word }}
+        </li>
+      </ul>
+    </div>
+    <div class="discovered-words">
+      <h3>Discovered</h3>
+      <ul>
+        <li *ngFor="let word of discoveredWords">
+          {{ word }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>

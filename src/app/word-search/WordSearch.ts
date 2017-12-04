@@ -1,5 +1,5 @@
 import { WordDirection } from './WordDirection';
-import { LetterGrid } from './LetterGrid';
+import { LetterGrid } from './Grid';
 import { GridPosition } from './GridPosition';
 import { Range1D, Range2D } from './DimensionalRange';
 import { randomInteger } from './helpers';
@@ -23,6 +23,31 @@ export class WordSearch {
 
   constructor(width: number, height: number) {
     this.grid = new LetterGrid(width, height);
+  }
+
+  public letter(x: number, y: number): string {
+    return this.grid.get(new GridPosition(x, y));
+  }
+
+  public extract(start: GridPosition, end: GridPosition): string {
+    let word = '';
+    this.grid.for(start, end, (letter: string) => {
+      word += letter;
+    });
+    return word;
+    // const dx = end.x - start.x;
+    // const dy = end.y - start.y;
+    // if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
+    //   const direction = new WordDirection(dx, dy);
+    //   let here = start;
+    //   let word = this.grid.get(here);
+    //   while (!here.equals(end)) {
+    //     here = here.moved(direction);
+    //     word += this.grid.get(here);
+    //   }
+    //   return word;
+    // }
+    // return null;
   }
 
   public startingRange(word: string, direction: WordDirection): Range2D {
@@ -110,13 +135,16 @@ export class WordSearch {
     this.grid.fillRemainder();
   }
 
-  public generate(words: string[]): void {
+  public generate(words: string[]): string[] {
+    const inserted = [];
     for (const word of words) {
       try {
         this.autoInsert(word);
+        inserted.push(word);
       } catch (error) {}
     }
     this.finishGenerating();
+    return inserted;
   }
 
   public toString(): string {

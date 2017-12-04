@@ -1,0 +1,44 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+// .grid {
+// }
+
+.word-list {
+  text-align: left;
+  font-size: 1.5em;
+  padding-left: 2em;
+}
+
+.letter-block {
+  padding: 0.5em;
+  font-size: 1.5em;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  background-color: rgba(0, 0, 0, 0);
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+
+  border: 1px dotted;
+  border-color: rgba(0, 0, 0, 0);
+
+  &.selected {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &.discovered {
+    color: blue;
+    font-weight: bold;
+  }
+
+  span {
+    display: inline-block;
+    width: 1em;
+  }
+}

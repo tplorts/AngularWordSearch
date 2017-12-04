@@ -182,7 +182,7 @@ describe('WordSearch', () => {
     it('should make a word search', () => {
       const ws = new WordSearch(4, 5);
       const someWords = ['the', 'cat', 'in', 'a', 'hat'];
-      ws.generate(someWords);
+      expect(ws.generate(someWords)).toEqual(someWords);
       const gridString = ws.toString();
       for (const letter of someWords.join('').toUpperCase()) {
         expect(gridString).toContain(letter);
@@ -192,7 +192,7 @@ describe('WordSearch', () => {
     it('should insert 4 5-letter words in a 5x4 all row-wise', () => {
       const ws = new WordSearch(5, 4);
       const someWords = ['mango', 'apple', 'phone', 'light'];
-      ws.generate(someWords);
+      expect(ws.generate(someWords)).toEqual(someWords);
       const asRow = (s: string) => s.toUpperCase().split('').join(' ');
       const asRowReverse = (s: string) => s.toUpperCase().split('').reverse().join(' ');
       const gridString = ws.toString();

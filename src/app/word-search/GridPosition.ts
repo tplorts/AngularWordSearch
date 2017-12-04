@@ -13,6 +13,14 @@ export class GridPosition {
     return this._y;
   }
 
+  public equalsXY(x: number, y: number): boolean {
+    return this.x === x && this.y === y;
+  }
+
+  public equals(that: GridPosition): boolean {
+    return this.x === that.x && this.y === that.y;
+  }
+
   public moved(direction: WordDirection): GridPosition {
     return new GridPosition(this.x + direction.deltaX, this.y + direction.deltaY);
   }

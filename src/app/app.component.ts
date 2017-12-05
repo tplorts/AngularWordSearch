@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser';
+import { Title, DomSanitizer } from '@angular/platform-browser';
+// import { MatIconRegistry } from '@angular/material';
+
 import { TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs/observable/merge';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -9,7 +11,11 @@ import { environment } from '../environments/environment';
 import { Logger } from './core/logger.service';
 import { I18nService } from './core/i18n.service';
 
+
+
 const log = new Logger('App');
+
+
 
 @Component({
   selector: 'app-root',
@@ -18,11 +24,21 @@ const log = new Logger('App');
 })
 export class AppComponent implements OnInit {
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private titleService: Title,
-              private translateService: TranslateService,
-              private i18nService: I18nService) { }
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title,
+    private translateService: TranslateService,
+    private i18nService: I18nService,
+    // private iconRegistry: MatIconRegistry,
+    // private sanitizer: DomSanitizer,
+  ) {
+    // for (const iconName of ['thumbup'])
+    // iconRegistry.addSvgIcon(
+    //   'thumbs-up',
+    //   sanitizer.bypassSecurityTrustResourceUrl('assets/img/examples/thumbup-icon.svg')
+    // );
+  }
 
   ngOnInit() {
     // Setup logger

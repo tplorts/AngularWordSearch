@@ -1,39 +1,76 @@
 
-<div class="wrapper">
+<mat-card>
+  <mat-card-content>
+    <button mat-button
+      (click)="generate()"
+    >
+      Regenerate with same configuration
+    </button>
+    <button mat-button
+      (click)="createNewWordSearch()"
+    >
+      Create a new Word Search
+    </button>
+  </mat-card-content>
+</mat-card>
 
-  <div class="grid">
-    <table>
-      <tr *ngFor="let row of rows">
-        <td *ngFor="let column of columns">
-          <div
-            class="letter-block"
-            [ngClass]="{ 'selected': isSelected(row, column), 'discovered': isDiscovered(row, column) }"
-            (click)="select(row, column)"
-          >
-            <span [innerHtml]="letter(row, column)"></span>
-          </div>
-        </td>
-      </tr>
-    </table>
-  </div>
+<mat-card>
+  <mat-card-content>
+    <div class="wrapper">
 
-  <div class="word-list">
-    <div class="pending-words">
-      <h3>Pending</h3>
-      <ul>
-        <li *ngFor="let word of pendingWords">
-          {{ word }}
-        </li>
-      </ul>
+      <div class="grid">
+        <table>
+          <tr *ngFor="let row of rows">
+            <td *ngFor="let column of columns">
+              <div
+                class="letter-block"
+                [ngClass]="{ 'selected': isSelected(row, column), 'discovered': isDiscovered(row, column) }"
+                (click)="select(row, column)"
+              >
+                <span [innerHtml]="letter(row, column)"></span>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="word-list">
+        <mat-slide-toggle
+          [(ngModel)]="showPendingWords"
+          matTooltip="This will reveal to you the list of words hidden in this word seach.  You will receive a bonus for solving the word search without revealing the pending words!"
+          [matTooltipPosition]="'above'"
+        >Reveal Pending Words</mat-slide-toggle>
+        <div class="pending-words" *ngIf="showPendingWords">
+          <h3>Pending</h3>
+          <ul>
+            <li *ngFor="let word of pendingWords">
+              {{ word }}
+            </li>
+          </ul>
+        </div>
+        <div class="discovered-words">
+          <h3>Discovered</h3>
+          <small *ngIf="discoveredWords.length === 0">
+            Nothing yet&hellip;
+          </small>
+          <ul>
+            <li *ngFor="let word of discoveredWords">
+              {{ word }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
     </div>
-    <div class="discovered-words">
-      <h3>Discovered</h3>
-      <ul>
-        <li *ngFor="let word of discoveredWords">
-          {{ word }}
-        </li>
-      </ul>
-    </div>
-  </div>
 
-</div>
+    <div *ngIf="!revealedPendingWords">
+      <mat-icon svgIcon="thumbs-up"></mat-icon>
+      You still haven't revealed the pending words.
+    </div>
+    <div *ngIf="revealedPendingWords">
+      <mat-icon svgIcon="info"></mat-icon>
+      You have revealed the pending words.  You can no longer receive the bonus.
+    </div>
+
+  </mat-card-content>
+</mat-card>

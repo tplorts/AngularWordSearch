@@ -35,19 +35,6 @@ export class WordSearch {
       word += letter;
     });
     return word;
-    // const dx = end.x - start.x;
-    // const dy = end.y - start.y;
-    // if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
-    //   const direction = new WordDirection(dx, dy);
-    //   let here = start;
-    //   let word = this.grid.get(here);
-    //   while (!here.equals(end)) {
-    //     here = here.moved(direction);
-    //     word += this.grid.get(here);
-    //   }
-    //   return word;
-    // }
-    // return null;
   }
 
   public startingRange(word: string, direction: WordDirection): Range2D {
@@ -82,6 +69,7 @@ export class WordSearch {
     const isTooWide = L > this.grid.width;
     const isTooTall = L > this.grid.height;
     let potentialDirections: WordDirection[];
+
     if (isTooWide && isTooTall) {
       potentialDirections = [];
     } else if (isTooWide) {
@@ -91,6 +79,7 @@ export class WordSearch {
     } else {
       potentialDirections = WordDirection.All;
     }
+
     return potentialDirections;
   }
 

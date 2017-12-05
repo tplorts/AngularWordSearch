@@ -1,11 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { Logger } from '../core/logger.service';
+import {
+  Component,
+  OnInit,
+} from '@angular/core';
+import {
+  MatSnackBar,
+  MatDialog,
+} from '@angular/material';
 
+import { Logger } from '../core/logger.service';
 import { WordSearchService } from './word-search.service';
 import { WordSearch } from './WordSearch';
 import { GridPosition } from './GridPosition';
 import { Grid } from './Grid';
 import { integerSequence } from './helpers';
+import { NewWordSearchDialogComponent } from './new-word-search-dialog/new-word-search-dialog.component';
 
 
 
@@ -20,33 +28,97 @@ const log = new Logger('WordSearch');
 })
 export class WordSearchComponent implements OnInit {
 
-  public rows: number[];
-  public columns: number[];
   private wordSearch: WordSearch;
+
+  private _inputWords: string[];
   private _insertedWords: string[];
   private _pendingWords: string[];
   private _discoveredWords: string[];
+
   private selectedPosition: GridPosition;
   private discoveryGrid: Grid<boolean>;
 
-  constructor(private wordSearchService: WordSearchService) {
+  private _width: number;
+  private _height: number;
+  private _rows: number[];
+  private _columns: number[];
+
+  private _showPendingWords: boolean;
+  private _revealedPendingWords: boolean;
+
+  constructor(
+    private wordSearchService: WordSearchService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+  ) {
     this.selectedPosition = null;
+    this._showPendingWords = null;
 
-    const h = 8;
-    const w = 12;
-    this.discoveryGrid = new Grid<boolean>(w, h);
-    this.discoveryGrid.setAll(() => false);
-    this.rows = integerSequence(h).reverse();
-    this.columns = integerSequence(w);
-    this.wordSearch = new WordSearch(w, h);
-    const words = ['astrobleme', 'bruxism', 'clepsydra', 'degust', 'etui', 'flocculent'];
-    this._insertedWords = this.wordSearch.generate(words);
-
-    this._pendingWords = [...this._insertedWords];
-    this._discoveredWords = [];
+    this.setSize(20, 20);
   }
 
   ngOnInit() {
+    this.generate([
+      'astrobleme', 'bruxism', 'clepsydra', 'degust',
+      'etui', 'flocculent', 'claggy', 'gaberlunzie',
+      'onolatry', 'scrippage', 'zopissa',
+    ]);
+  }
+
+  private setSize(width: number, height: number): void {
+    this._width = width;
+    this._height = height;
+
+    this.discoveryGrid = new Grid<boolean>(this._width, this._height);
+    this.discoveryGrid.setAll(() => false);
+
+    this._columns = integerSequence(this._width);
+    this._rows = integerSequence(this._height).reverse();
+  }
+
+  public generate(newWords?: string[]): void {
+    this._showPendingWords = false;
+    this.discoveryGrid.setAll(() => false);
+
+    this.wordSearch = new WordSearch(this._width, this._height);
+
+    if (newWords) {
+      this._inputWords = [...newWords];
+    }
+    this._insertedWords = this.wordSearch.generate(this._inputWords);
+
+    this._pendingWords = [...this._insertedWords];
+    this._discoveredWords = [];
+
+    this._revealedPendingWords = this.showPendingWords;
+  }
+
+  public createNewWordSearch(): void {
+    const dialogRef = this.dialog.open(NewWordSearchDialogComponent, {
+      // width: '250px',
+      data: {
+        width: this._width,
+        height: this._height,
+        words: this._inputWords,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        log.debug('The dialog was closed', result);
+        this.setSize(result.width, result.height);
+        this.generate(result.words);
+      },
+    );
+
+  }
+
+  public get rows(): number[] {
+    return this._rows;
+  }
+
+  public get columns(): number[] {
+    return this._columns;
   }
 
   public get insertedWords(): string[] {
@@ -59,6 +131,19 @@ export class WordSearchComponent implements OnInit {
 
   public get discoveredWords(): string[] {
     return this._discoveredWords;
+  }
+
+  public get showPendingWords(): boolean {
+    return !!this._showPendingWords;
+  }
+
+  public set showPendingWords(show: boolean) {
+    this._revealedPendingWords = true;
+    this._showPendingWords = show;
+  }
+
+  public get revealedPendingWords(): boolean {
+    return this._revealedPendingWords;
   }
 
   public letter(row: number, column: number): string {
@@ -85,10 +170,17 @@ export class WordSearchComponent implements OnInit {
       if (word && this.discoverWord(word)) {
         log.debug('found:', word);
         this.markDiscovered(start, end);
+        if (this.isComplete()) {
+          this.showComplete();
+        }
       }
     } else {
       this.selectedPosition = new GridPosition(column, row);
     }
+  }
+
+  public isComplete(): boolean {
+    return this._pendingWords.length === 0;
   }
 
   public markDiscovered(start: GridPosition, end: GridPosition): void {
@@ -101,5 +193,11 @@ export class WordSearchComponent implements OnInit {
 
   public isDiscovered(row: number, column: number): boolean {
     return this.discoveryGrid.get(new GridPosition(column, row));
+  }
+
+  private showComplete(): void {
+    this.snackBar.open('Well done!  You completed the word search', '', {
+      duration: 3e3,
+    });
   }
 }

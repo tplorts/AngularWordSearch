@@ -6,6 +6,10 @@ export class Range1D {
   public from: number;
   public to: number;
 
+  public static AllOf(size: number) {
+    return new Range1D(size, 0, 1);
+  }
+
   constructor(
     maxSpan: number,
     delta: number,
@@ -29,6 +33,10 @@ export class Range1D {
 
 
 export class Range2D {
+
+  public static AllOf(width: number, height: number): Range2D {
+    return new Range2D(Range1D.AllOf(width), Range1D.AllOf(height));
+  }
   constructor(public xRange: Range1D, public yRange: Range1D) {}
 
   contains(p: GridPosition): boolean {

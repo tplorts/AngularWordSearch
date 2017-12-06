@@ -14,5 +14,5 @@ export function integerSequence(endExlusive: number): number[] {
 
 
 export function unitScalar(x: number) {
-  return x / (Math.abs(x) || 1);
+  return x && (x / Math.abs(x));
 }

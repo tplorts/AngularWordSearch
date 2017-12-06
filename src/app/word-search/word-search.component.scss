@@ -13,6 +13,26 @@
   padding-left: 2em;
 }
 
+.pending-list {
+  li {
+    .mat-icon-button {
+      height: initial;
+      line-height: initial;
+    }
+
+    .hint-icon {
+      transition: opacity 0.2s;
+      opacity: 0;
+    }
+
+    &:hover {
+      .hint-icon {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 small {
   font-style: italic;
   color: #999;
@@ -22,7 +42,7 @@ small {
   padding: 0.5em;
   font-size: 1.5em;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   background-color: rgba(0, 0, 0, 0);
 
   &:hover {
@@ -40,6 +60,13 @@ small {
   &.discovered {
     color: blue;
     font-weight: bold;
+  }
+
+  box-shadow: 0 0 0 0 red;
+
+  &.hinting {
+    // color: red;
+    box-shadow: 0 0 5px 5px red;
   }
 
   span {

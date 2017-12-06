@@ -1,3 +1,4 @@
+import { Logger } from '../core/logger.service';
 import { WordDirection } from './WordDirection';
 import { LetterGrid } from './Grid';
 import { GridPosition } from './GridPosition';
@@ -6,8 +7,20 @@ import { randomInteger } from './helpers';
 
 
 
+const log = new Logger('WordSearch');
+
+
+
 export class WordConfiguration {
   constructor(public startingPosition: GridPosition, public direction: WordDirection) {}
+
+  public endingPosition(length: number): GridPosition {
+    return this.startingPosition.movedBy(this.direction, length - 1);
+  }
+
+  public toString(): string {
+    return `${this.startingPosition}-${this.direction}`;
+  }
 }
 
 
@@ -19,10 +32,24 @@ export class WordSearch {
   };
 
   private grid: LetterGrid;
-  private words: string[];
+  // private words: string[];
+  private _validRange: Range2D;
 
   constructor(width: number, height: number) {
     this.grid = new LetterGrid(width, height);
+    this._validRange = Range2D.AllOf(width, height);
+  }
+
+  public get width(): number {
+    return this.grid.width;
+  }
+
+  public get height(): number {
+    return this.grid.height;
+  }
+
+  public isValidPosition(position: GridPosition): boolean {
+    return this._validRange.contains(position);
   }
 
   public letter(x: number, y: number): string {
@@ -31,11 +58,25 @@ export class WordSearch {
 
   public extract(start: GridPosition, end: GridPosition): string {
     let word = '';
-    this.grid.for(start, end, (letter: string) => {
+    // log.debug(`extracting from ${start} to ${end}`);
+    this.grid.forEach(start, end, (letter: string) => {
+      // log.debug('adding', letter);
       word += letter;
     });
     return word;
   }
+
+  // public isMatch(targetWord: string, configuration: WordConfiguration): boolean {
+  //   const endPosition = configuration.endingPosition(targetWord.length);
+  //   if (this.isValidPosition(endPosition)) {
+  //     let equalCount = 0;
+  //     this.grid.for(configuration.startingPosition, endPosition, (letter: string) => {
+  //       equalCount += letter ===
+  //     })
+  //   }
+  //   return false;
+  // }
+  // public isMatch ()
 
   public startingRange(word: string, direction: WordDirection): Range2D {
     const L = word.length;

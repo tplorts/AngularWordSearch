@@ -1,7 +1,12 @@
+import { Logger } from '../core/logger.service';
 import { GridPosition } from './GridPosition';
 import { Range2D } from './DimensionalRange';
 import { WordDirection } from './WordDirection';
 import { randomInteger } from './helpers';
+
+
+
+const log = new Logger('Grid');
 
 
 
@@ -78,13 +83,15 @@ export class Grid<ElementType> {
   //   return empties[randomInteger(empties.length)];
   // }
 
-  public for(
+  public forEach(
     start: GridPosition,
     end: GridPosition,
     doSomething: (element: ElementType, position: GridPosition) => void
   ): void {
+    // log.debug(`for loop ${start} through ${end}`);
     const dx = end.x - start.x;
     const dy = end.y - start.y;
+    // log.debug(`for loop ${dx}:${dy}`);
     if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
       const direction = new WordDirection(dx, dy);
       let here = start;

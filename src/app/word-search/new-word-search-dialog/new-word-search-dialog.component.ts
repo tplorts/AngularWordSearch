@@ -24,21 +24,7 @@ import {
 })
 export class NewWordSearchDialogComponent implements OnInit {
 
-  // public width: number;
-  // public height: number;
-  // public wordsText: string;
   public formGroup: FormGroup;
-
-  // private static integerFormControl(initialValue: number): FormControl {
-  //   return NewWordSearchDialogComponent.regexpFormControl(initialValue, /\d+/);
-  // }
-
-  // private static regexpFormControl(initialValue: any, exp: RegExp): FormControl {
-  //   return new FormControl('', [
-  //     Validators.required,
-  //     Validators.pattern(exp),
-  //   ]);
-  // }
 
   constructor(
     public dialogRef: MatDialogRef<NewWordSearchDialogComponent>,
@@ -91,9 +77,5 @@ export class NewWordSearchDialogComponent implements OnInit {
       words: w && w.trim().split(/\s+/),
     };
     return result;
-  }
-
-  public isInvalidPattern(formControl: FormControl): boolean {
-    return formControl.hasError('pattern') && !formControl.hasError('required');
   }
 }

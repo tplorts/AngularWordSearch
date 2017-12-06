@@ -22,7 +22,11 @@ export class GridPosition {
   }
 
   public moved(direction: WordDirection): GridPosition {
-    return new GridPosition(this.x + direction.deltaX, this.y + direction.deltaY);
+    return this.movedBy(direction, 1);
+  }
+
+  public movedBy(direction: WordDirection, n: number): GridPosition {
+    return new GridPosition(this.x + direction.deltaX * n, this.y + direction.deltaY * n);
   }
 
   public toString(): string {

@@ -24,7 +24,7 @@
             <td *ngFor="let column of columns">
               <div
                 class="letter-block"
-                [ngClass]="{ 'selected': isSelected(row, column), 'discovered': isDiscovered(row, column) }"
+                [ngClass]="blockClasses(row, column)"
                 (click)="select(row, column)"
               >
                 <span [innerHtml]="letter(row, column)"></span>
@@ -42,9 +42,18 @@
         >Reveal Pending Words</mat-slide-toggle>
         <div class="pending-words" *ngIf="showPendingWords">
           <h3>Pending</h3>
-          <ul>
+          <ul class="pending-list">
             <li *ngFor="let word of pendingWords">
               {{ word }}
+              <button mat-icon-button
+                (click)="revealHint(word)"
+              >
+                <mat-icon
+                  class="hint-icon"
+                  aria-label="Reveal a hint"
+                  matTooltip="Reveal a hint"
+                >visibility</mat-icon>
+              </button>
             </li>
           </ul>
         </div>
@@ -62,14 +71,26 @@
       </div>
 
     </div>
+  </mat-card-content>
+</mat-card>
 
-    <div *ngIf="!revealedPendingWords">
-      <mat-icon svgIcon="thumbs-up"></mat-icon>
-      You still haven't revealed the pending words.
+<mat-card>
+  <mat-card-content>
+
+    <div>
+      <div *ngIf="revealedPendingWords; then revealedBlock else unrevealedBlock"></div>
+      <ng-template #revealedBlock>
+        <mat-icon>info</mat-icon>
+        You have revealed the pending words. You can no longer receive the bonus.
+      </ng-template>
+      <ng-template #unrevealedBlock>
+        <mat-icon>grade</mat-icon>
+        You still haven't revealed the pending words.
+      </ng-template>
     </div>
-    <div *ngIf="revealedPendingWords">
-      <mat-icon svgIcon="info"></mat-icon>
-      You have revealed the pending words.  You can no longer receive the bonus.
+
+    <div>
+      <p>{{ hintCount }} hints shown so far</p>
     </div>
 
   </mat-card-content>

@@ -6,10 +6,13 @@ import {
   MatSnackBar,
   MatDialog,
 } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/timer';
 
 import { Logger } from '../core/logger.service';
 import { WordSearchService } from './word-search.service';
 import { WordSearch } from './WordSearch';
+import { WordSearchSolver } from './WordSearchSolver';
 import { GridPosition } from './GridPosition';
 import { Grid } from './Grid';
 import { integerSequence } from './helpers';
@@ -17,7 +20,7 @@ import { NewWordSearchDialogComponent } from './new-word-search-dialog/new-word-
 
 
 
-const log = new Logger('WordSearch');
+const log = new Logger('WordSearch.compenent');
 
 
 
@@ -29,6 +32,7 @@ const log = new Logger('WordSearch');
 export class WordSearchComponent implements OnInit {
 
   private wordSearch: WordSearch;
+  private solver: WordSearchSolver;
 
   private _inputWords: string[];
   private _insertedWords: string[];
@@ -36,6 +40,7 @@ export class WordSearchComponent implements OnInit {
   private _discoveredWords: string[];
 
   private selectedPosition: GridPosition;
+  private hintPosition: GridPosition;
   private discoveryGrid: Grid<boolean>;
 
   private _width: number;
@@ -45,6 +50,7 @@ export class WordSearchComponent implements OnInit {
 
   private _showPendingWords: boolean;
   private _revealedPendingWords: boolean;
+  private _hintCount: number;
 
   constructor(
     private wordSearchService: WordSearchService,
@@ -52,9 +58,11 @@ export class WordSearchComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.selectedPosition = null;
+    this.hintPosition = null;
     this._showPendingWords = null;
+    this._hintCount = 0;
 
-    this.setSize(20, 20);
+    this.setSize(12, 10);
   }
 
   ngOnInit() {
@@ -81,6 +89,7 @@ export class WordSearchComponent implements OnInit {
     this.discoveryGrid.setAll(() => false);
 
     this.wordSearch = new WordSearch(this._width, this._height);
+    this.solver = new WordSearchSolver(this.wordSearch);
 
     if (newWords) {
       this._inputWords = [...newWords];
@@ -91,11 +100,11 @@ export class WordSearchComponent implements OnInit {
     this._discoveredWords = [];
 
     this._revealedPendingWords = this.showPendingWords;
+    this._hintCount = 0;
   }
 
   public createNewWordSearch(): void {
     const dialogRef = this.dialog.open(NewWordSearchDialogComponent, {
-      // width: '250px',
       data: {
         width: this._width,
         height: this._height,
@@ -146,6 +155,10 @@ export class WordSearchComponent implements OnInit {
     return this._revealedPendingWords;
   }
 
+  public get hintCount(): number {
+    return this._hintCount;
+  }
+
   public letter(row: number, column: number): string {
     return this.wordSearch.letter(column, row);
   }
@@ -184,19 +197,54 @@ export class WordSearchComponent implements OnInit {
   }
 
   public markDiscovered(start: GridPosition, end: GridPosition): void {
-    this.discoveryGrid.for(start, end, (_, pos) => { this.discoveryGrid.set(pos, true); });
+    this.discoveryGrid.forEach(start, end, (_, pos) => { this.discoveryGrid.set(pos, true); });
   }
 
-  public isSelected(row: number, column: number): boolean {
+  public revealHint(word: string): void {
+    if (this.hintPosition) {
+      return; // Another hint has yet to disappear.
+    }
+    const config = this.solver.find(word);
+    if (config) {
+      this._hintCount++;
+      this.setHint(config.startingPosition);
+      Observable.timer(1500).subscribe(() => this.setHint(null));
+    } else {
+      this.simpleSnackBar(`Whoops!  I could not find ${word}.`);
+    }
+  }
+
+  private setHint(position: GridPosition): void {
+    this.hintPosition = position;
+  }
+
+  public blockClasses(row: number, column: number): object {
+    return {
+      selected: this.isSelected(row, column),
+      discovered: this.isDiscovered(row, column),
+      hinting: this.isHinting(row, column),
+    };
+  }
+
+  private isSelected(row: number, column: number): boolean {
     return this.selectedPosition && this.selectedPosition.equalsXY(column, row);
   }
 
-  public isDiscovered(row: number, column: number): boolean {
+  private isDiscovered(row: number, column: number): boolean {
     return this.discoveryGrid.get(new GridPosition(column, row));
   }
 
+  private isHinting(row: number, column: number): boolean {
+    const p = this.hintPosition;
+    return p && p.equalsXY(column, row);
+  }
+
   private showComplete(): void {
-    this.snackBar.open('Well done!  You completed the word search', '', {
+    this.simpleSnackBar('Well done!  You completed the word search');
+  }
+
+  private simpleSnackBar(message: string): void {
+    this.snackBar.open(message, '', {
       duration: 3e3,
     });
   }

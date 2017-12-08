@@ -71,6 +71,20 @@ export class WordSearchComponent implements OnInit {
       'etui', 'flocculent', 'claggy', 'gaberlunzie',
       'onolatry', 'scrippage', 'zopissa',
     ]);
+
+    this.initCanvas();
+  }
+
+  private initCanvas(): void {
+    // const canvas = <HTMLCanvasElement> document.querySelector('#grid-background-canvas');
+    // const drawing = canvas.getContext('2d');
+    // if (!drawing) {
+    //   return;
+    // }
+    // drawing.beginPath();
+    // drawing.moveTo(10, 10);
+    // drawing.lineTo(100, 100);
+    // drawing.stroke();
   }
 
   private setSize(width: number, height: number): void {
@@ -85,7 +99,7 @@ export class WordSearchComponent implements OnInit {
   }
 
   public generate(newWords?: string[]): void {
-    this._showPendingWords = false;
+    this._showPendingWords = true;
     this.discoveryGrid.setAll(() => false);
 
     this.wordSearch = new WordSearch(this._width, this._height);

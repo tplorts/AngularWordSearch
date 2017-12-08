@@ -3,35 +3,40 @@
   <mat-card-content>
     <button mat-button
       (click)="generate()"
+      color="primary"
     >
       Regenerate with same configuration
     </button>
     <button mat-button
       (click)="createNewWordSearch()"
+      color="primary"
     >
       Create a new Word Search
     </button>
   </mat-card-content>
 </mat-card>
 
-<mat-card>
+<mat-card class="game-card">
   <mat-card-content>
     <div class="wrapper">
 
-      <div class="grid">
-        <table>
-          <tr *ngFor="let row of rows">
-            <td *ngFor="let column of columns">
-              <div
-                class="letter-block"
-                [ngClass]="blockClasses(row, column)"
-                (click)="select(row, column)"
-              >
-                <span [innerHtml]="letter(row, column)"></span>
-              </div>
-            </td>
-          </tr>
-        </table>
+      <div>
+        <div class="grid">
+          <!-- <canvas id="grid-background-canvas"></canvas> -->
+          <table>
+            <tr *ngFor="let row of rows">
+              <td *ngFor="let column of columns">
+                <div
+                  class="letter-block"
+                  [ngClass]="blockClasses(row, column)"
+                  (click)="select(row, column)"
+                >
+                  <span [innerHtml]="letter(row, column)"></span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
 
       <div class="word-list">
@@ -41,10 +46,9 @@
           [matTooltipPosition]="'above'"
         >Reveal Pending Words</mat-slide-toggle>
         <div class="pending-words" *ngIf="showPendingWords">
-          <h3>Pending</h3>
+          <h4>Pending</h4>
           <ul class="pending-list">
             <li *ngFor="let word of pendingWords">
-              {{ word }}
               <button mat-icon-button
                 (click)="revealHint(word)"
               >
@@ -54,11 +58,12 @@
                   matTooltip="Reveal a hint"
                 >visibility</mat-icon>
               </button>
+              <span>{{ word }}</span>
             </li>
           </ul>
         </div>
         <div class="discovered-words">
-          <h3>Discovered</h3>
+          <h4>Discovered</h4>
           <small *ngIf="discoveredWords.length === 0">
             Nothing yet&hellip;
           </small>

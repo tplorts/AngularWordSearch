@@ -62,7 +62,7 @@ export class WordSearchComponent implements OnInit {
     this._showPendingWords = null;
     this._hintCount = 0;
 
-    this.setSize(12, 10);
+    this.setSize(16, 16);
   }
 
   ngOnInit() {

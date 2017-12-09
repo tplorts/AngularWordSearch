@@ -3,7 +3,7 @@
     <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="false" [disableClose]="!isMobile"
                  ngClass.gt-sm="has-border">
       <mat-toolbar color="primary">
-        <span translate>APP_NAME</span>
+        <span translate>AppName</span>
         <div fxFlex></div>
         <div>
         </div>
@@ -21,8 +21,8 @@
       <nav>
         <mat-list>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/home" routerLinkActive="active" (click)="sidenav.close()">
-            <span translate>Home</span>
+          <a mat-list-item routerLink="/play" routerLinkActive="active" (click)="sidenav.close()">
+            <span translate>Play Game</span>
           </a>
           <mat-divider></mat-divider>
           <a mat-list-item routerLink="/about" routerLinkActive="active" (click)="sidenav.close()">

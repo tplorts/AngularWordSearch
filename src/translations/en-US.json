@@ -1,7 +1,6 @@
 {
-  "APP_NAME": "AngularWordSearch",
+  "AppName": "Ted's Word Search",
   "About": "About",
-  "Hello world !": "Hello world !",
-  "Home": "Home",
+  "Play Game": "Play Game",
   "Version": "Version"
 }

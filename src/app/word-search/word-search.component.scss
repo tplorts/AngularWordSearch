@@ -26,6 +26,11 @@
     z-index: 2;
     border-spacing: 0;
   }
+
+  td {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .word-list {
@@ -78,13 +83,16 @@ small {
   color: #999;
 }
 
+$block-size: 2rem;
+$discovered-color: rgb(230, 230, 230);
+
 .letter-block {
   display: flex;
   justify-content: space-around;
   align-items: center;
   font-size: 1.25em;
-  width: 1.8em;
-  height: 1.8em;
+  width: $block-size;
+  height: $block-size;
   transition: all 0.2s;
   background-color: rgba(0, 0, 0, 0);
   border: 1px dotted;
@@ -97,7 +105,8 @@ small {
   &.discovered {
     color: blue;
     font-weight: bold;
-    background-color: rgb(230, 230, 230);
+    background-color: $discovered-color;
+    border: 1px solid $discovered-color;
   }
 
   box-shadow: 0 0 0 0 red;

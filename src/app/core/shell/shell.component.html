@@ -4,19 +4,6 @@
                  ngClass.gt-sm="has-border">
       <mat-toolbar color="primary">
         <span translate>AppName</span>
-        <div fxFlex></div>
-        <div>
-        </div>
-        <div>
-          <button mat-icon-button [matMenuTriggerFor]="languageMenu">
-            <mat-icon>language</mat-icon>
-          </button>
-          <mat-menu #languageMenu="matMenu">
-            <button mat-menu-item *ngFor="let language of languages" (click)="setLanguage(language)">
-              {{language}}
-            </button>
-          </mat-menu>
-        </div>
       </mat-toolbar>
       <nav>
         <mat-list>

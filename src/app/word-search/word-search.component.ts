@@ -59,7 +59,7 @@ export class WordSearchComponent implements OnInit {
   ) {
     this.selectedPosition = null;
     this.hintPosition = null;
-    this._showPendingWords = null;
+    this._showPendingWords = true;
     this._hintCount = 0;
 
     this.setSize(16, 16);
@@ -99,7 +99,6 @@ export class WordSearchComponent implements OnInit {
   }
 
   public generate(newWords?: string[]): void {
-    this._showPendingWords = true;
     this.discoveryGrid.setAll(() => false);
 
     this.wordSearch = new WordSearch(this._width, this._height);
@@ -259,7 +258,7 @@ export class WordSearchComponent implements OnInit {
 
   private simpleSnackBar(message: string): void {
     this.snackBar.open(message, '', {
-      duration: 3e3,
+      duration: 5e3,
     });
   }
 }

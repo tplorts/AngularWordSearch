@@ -40,10 +40,11 @@
       </div>
 
       <div class="word-list">
-        <mat-slide-toggle
-          [(ngModel)]="showPendingWords"
-          matTooltip="This will reveal to you the list of words hidden in this word seach.  You will receive a bonus for solving the word search without revealing the pending words!"
+<!--           matTooltip="This will reveal to you the list of words hidden in this word seach.  You will receive a bonus for solving the word search without revealing the pending words!"
           [matTooltipPosition]="'above'"
+ -->
+         <mat-slide-toggle
+          [(ngModel)]="showPendingWords"
         >Reveal Pending Words</mat-slide-toggle>
         <div class="pending-words" *ngIf="showPendingWords">
           <h4>Pending</h4>
@@ -81,7 +82,7 @@
 
 <mat-card>
   <mat-card-content>
-
+<!-- 
     <div>
       <div *ngIf="revealedPendingWords; then revealedBlock else unrevealedBlock"></div>
       <ng-template #revealedBlock>
@@ -93,7 +94,7 @@
         You still haven't revealed the pending words.
       </ng-template>
     </div>
-
+ -->
     <div>
       <p>{{ hintCount }} hints shown so far</p>
     </div>
